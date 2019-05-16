@@ -1,0 +1,9 @@
+Application stack: 
+1)Boot (Console based), Log4j2 (For Async logging)
+2)Apache POI (For Excel reading)
+3)Spring AOP (For Logging entry and exit points)
+4)Junit + Mockito (For Unit Testing)
+
+Note:
+1)Main class to execute: CurrencyConverterEngineApplication
+2)Application logs can be found in currencyconverterengine.log file
