@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,8 +13,6 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +23,6 @@ import com.org.anz.currencyconverter.wrapper.ApplicationWrapper;
 
 @Component
 public class CurrencyConverterSpreadSheetReaderImpl implements CurrencyConverterSpreadSheetReader {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConverterSpreadSheetReaderImpl.class);
 
 	@Autowired
 	private ApplicationWrapper applicationWrapper;
@@ -64,10 +61,8 @@ public class CurrencyConverterSpreadSheetReaderImpl implements CurrencyConverter
 			return crossViaMatrixData;
 
 		} catch (FileNotFoundException e) {
-			LOGGER.error(ApplicationConstant.APP_ERROR_MESSAGE, e);
 			throw new FileUtilException(e);
 		} catch (IOException e) {
-			LOGGER.error(ApplicationConstant.APP_ERROR_MESSAGE, e);
 			throw new FileUtilException(e);
 		}
 
@@ -91,18 +86,20 @@ public class CurrencyConverterSpreadSheetReaderImpl implements CurrencyConverter
 			for (int currentRow = 1; currentRow < sheet.getPhysicalNumberOfRows(); currentRow++) {
 
 					String currencyPair = sheet.getRow(currentRow).getCell(0).getStringCellValue();
+					String baseCurrency = currencyPair.substring(0, 3);
+					String termsCurrency = currencyPair.substring(3);
+					String invertedCurrencyPair = termsCurrency.concat(baseCurrency);
 					String conversionRate = sheet.getRow(currentRow).getCell(1).getStringCellValue();
 					
 					directFeed.put(currencyPair, new BigDecimal(conversionRate));
+					directFeed.put(invertedCurrencyPair, BigDecimal.ONE.divide(new BigDecimal(conversionRate), 6, RoundingMode.DOWN));
 			}
 			
 			return directFeed;
 
 		} catch (FileNotFoundException e) {
-			LOGGER.error(ApplicationConstant.APP_ERROR_MESSAGE, e);
 			throw new FileUtilException(e);
 		} catch (IOException e) {
-			LOGGER.error(ApplicationConstant.APP_ERROR_MESSAGE, e);
 			throw new FileUtilException(e);
 		}
 
