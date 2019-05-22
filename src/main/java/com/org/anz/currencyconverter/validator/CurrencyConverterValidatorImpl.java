@@ -14,7 +14,7 @@ public class CurrencyConverterValidatorImpl implements CurrencyConverterValidato
 			throw new ValidationException("Input cannot be empty");
 		}
 
-		String[] inputData = input.split("\\s+");
+		String[] inputData = input.trim().split("\\s+");
 
 		if (inputData.length != 4) {
 			throw new ValidationException(
