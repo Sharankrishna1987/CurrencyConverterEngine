@@ -1,9 +1,8 @@
 package com.org.anz.currencyconverter.main;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +14,6 @@ import com.org.anz.currencyconverter.util.CurrencyCalculator;
 
 @Component
 public class CurrencyConverterImpl implements CurrencyConverter {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConverterImpl.class);
 
 	@Autowired
 	private ConsoleInputParser consoleInputParser;
@@ -31,31 +28,19 @@ public class CurrencyConverterImpl implements CurrencyConverter {
 	public String convert(String input) {
 
 		ConsoleRequestData consoleRequestData = consoleInputParser.parse(input);
-		String inputCurrencyPair = consoleRequestData.getBase().concat(consoleRequestData.getTerms());
-		String calculationModel = crossViaMatrixDataProvider.getCalculationModel(inputCurrencyPair);
 
-		if (calculationModel == null) {
+		if (consoleRequestData.getBase().equals(consoleRequestData.getTerms())) {
+			return buildResponse(consoleRequestData, consoleRequestData.getAmount());
+		}
+
+		List<String> calculationSteps = crossViaMatrixDataProvider.getCalculationSteps(consoleRequestData);
+
+		if (calculationSteps == null) {
 			throw new ValidationException(String.format("Unable to find rate for %s/%s", consoleRequestData.getBase(),
 					consoleRequestData.getTerms()));
 		}
-		
-		LOGGER.info(String.format("Calculation Model: %s", calculationModel));
 
-		switch (calculationModel) {
-
-		case "1:1":
-			return buildResponse(consoleRequestData, consoleRequestData.getAmount());
-
-		case "D":
-			return buildResponse(consoleRequestData, currencyCalculator.calculateConversionRateForDirectFeed(consoleRequestData));
-
-		case "Inv":
-			return buildResponse(consoleRequestData, currencyCalculator.calculateConversionRateForInverted(consoleRequestData));
-			
-		default:
-			return buildResponse(consoleRequestData, currencyCalculator.calculateConversionRateForCrossViaCurrency(consoleRequestData, calculationModel));
-
-		}
+		return buildResponse(consoleRequestData, currencyCalculator.calculate(calculationSteps, consoleRequestData));
 
 	}
 
