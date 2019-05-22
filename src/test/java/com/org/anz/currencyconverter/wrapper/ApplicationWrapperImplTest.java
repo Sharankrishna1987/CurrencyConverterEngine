@@ -16,4 +16,10 @@ public class ApplicationWrapperImplTest {
 		Assert.assertNotNull(applicationWrapperImpl.createInputStream(""));
 	}
 	
+	@Test
+	public void testGetScanner() {
+		ApplicationWrapperImpl applicationWrapperImpl = new ApplicationWrapperImpl();
+		Assert.assertNotNull(applicationWrapperImpl.getScanner());
+	}
+	
 }
