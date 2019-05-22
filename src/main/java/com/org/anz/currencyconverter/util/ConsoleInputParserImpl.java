@@ -18,8 +18,8 @@ public class ConsoleInputParserImpl implements ConsoleInputParser {
 	public ConsoleRequestData parse(String input) {
 
 		currencyConverterValidator.validate(input);
-
-		String[] inputData = input.split("\\s+");
+		
+		String[] inputData = input.trim().split("\\s+");
 
 		String fromCurrency = inputData[0];
 		String toCurrency = inputData[3];
