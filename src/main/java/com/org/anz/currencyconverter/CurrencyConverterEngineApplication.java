@@ -46,7 +46,6 @@ public class CurrencyConverterEngineApplication implements CommandLineRunner {
 					LOGGER.error(validatorException.getMessage());
 					LOGGER.info("-------------------------------------------------------");
 				} catch (Exception exception) {
-					LOGGER.error(exception.getMessage());
 					LOGGER.info("-------------------------------------------------------");
 				}
 
