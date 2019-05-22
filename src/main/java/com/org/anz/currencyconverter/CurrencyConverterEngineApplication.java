@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.org.anz.currencyconverter.exception.ValidationException;
 import com.org.anz.currencyconverter.main.CurrencyConverter;
+import com.org.anz.currencyconverter.wrapper.ApplicationWrapper;
 
 @SpringBootApplication
 public class CurrencyConverterEngineApplication implements CommandLineRunner {
@@ -19,6 +20,9 @@ public class CurrencyConverterEngineApplication implements CommandLineRunner {
 
 	@Autowired
 	private CurrencyConverter currencyConverter;
+	
+	@Autowired
+	private ApplicationWrapper applicationWrapper;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CurrencyConverterEngineApplication.class, args);
@@ -27,7 +31,7 @@ public class CurrencyConverterEngineApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		try (Scanner scanner = new Scanner(System.in)) {
+		try (Scanner scanner = applicationWrapper.getScanner()) {
 
 			while (true) {
 				
