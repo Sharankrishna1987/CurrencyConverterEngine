@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Scanner;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,11 @@ public class ApplicationWrapperImpl implements ApplicationWrapper {
 	@Override
 	public XSSFWorkbook createXSSFWorkbook(InputStream inputStream) throws IOException {
 		return new XSSFWorkbook(inputStream);
+	}
+	
+	@Override
+	public Scanner getScanner() {
+		return new Scanner(System.in);
 	}
 	
 }
