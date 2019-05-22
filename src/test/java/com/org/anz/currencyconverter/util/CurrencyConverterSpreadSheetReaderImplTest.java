@@ -91,7 +91,7 @@ public class CurrencyConverterSpreadSheetReaderImplTest {
 		when(mockCellTerms.getStringCellValue()).thenReturn("1.34");
 
 		Map<String, BigDecimal> directFeed = currencyConverterSpreadSheetReaderImpl.readDirectFeed();
-		Assert.assertEquals(1, directFeed.size());
+		Assert.assertEquals(2, directFeed.size());
 		Assert.assertEquals(new BigDecimal("1.34"), directFeed.get("AUDUSD"));
 	}
 
