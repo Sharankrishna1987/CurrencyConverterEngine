@@ -1,7 +1,11 @@
 package com.org.anz.currencyconverter.cache;
 
+import java.util.List;
+
+import com.org.anz.currencyconverter.model.ConsoleRequestData;
+
 public interface CrossViaMatrixDataProvider {
 
-	String getCalculationModel(String currencyPair);
+	List<String> getCalculationSteps(ConsoleRequestData consoleRequestData);
 
 }
